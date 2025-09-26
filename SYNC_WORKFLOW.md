@@ -6,8 +6,8 @@ This document outlines the **manual review workflow** for syncing upstream chang
 ## Branch Structure
 
 ```
-main      ← Always clean, synced with upstream/main
-nuxapay   ← Our stable branch with customizations
+polar     ← Always clean, synced with upstream/main (upstream sync branch)
+main      ← Our primary branch with NuxaPay customizations (DEFAULT)
 upstream  ← Official Polar repository (read-only)
 origin    ← Our fork: fleksa-bhushan/nuxa-pay
 ```
@@ -37,26 +37,26 @@ git log --oneline main..upstream/main
 git diff main..upstream/main
 ```
 
-### 2. Sync Main Branch
+### 2. Sync Polar Branch
 
 ```bash
-# Switch to main and update
-git checkout main
+# Switch to polar and update
+git checkout polar
 git merge upstream/main --ff-only
-git push origin main
+git push origin polar
 ```
 
 ### 3. Review Before Merging
 
-**⚠️ IMPORTANT: Always review changes before merging into nuxapay**
+**⚠️ IMPORTANT: Always review changes before merging into main**
 
 ```bash
 # See what would be merged
-git checkout nuxapay
-git log --oneline nuxapay..main
+git checkout main
+git log --oneline main..polar
 
 # Check for conflicts
-git merge-tree $(git merge-base nuxapay main) nuxapay main
+git merge-tree $(git merge-base main polar) main polar
 ```
 
 ### 4. Merge Upstream Changes (After Review)
@@ -65,8 +65,8 @@ git merge-tree $(git merge-base nuxapay main) nuxapay main
 # Create backup tag before merge
 git tag -a "pre-merge-$(date +%Y%m%d)" -m "Backup before upstream merge"
 
-# Merge main into nuxapay
-git merge main
+# Merge polar into main
+git merge polar
 
 # If conflicts occur:
 # 1. Resolve conflicts manually
@@ -93,8 +93,8 @@ tail -f /tmp/polar-*.log
 ### 6. Push Changes
 
 ```bash
-# Push updated nuxapay branch
-git push origin nuxapay
+# Push updated main branch
+git push origin main
 ```
 
 ## Conflict Resolution Strategy
@@ -165,17 +165,17 @@ git push origin nuxapay --force-with-lease
 
 ```bash
 # Check upstream changes
-git fetch upstream && git log --oneline main..upstream/main
+git fetch upstream && git log --oneline polar..upstream/main
 
 # Safe merge check
-git merge-tree $(git merge-base nuxapay main) nuxapay main
+git merge-tree $(git merge-base main polar) main polar
 
 # Backup before merge
 git tag -a "pre-merge-$(date +%Y%m%d)" -m "Backup"
 
 # Merge workflow
-git checkout main && git merge upstream/main --ff-only
-git checkout nuxapay && git merge main
+git checkout polar && git merge upstream/main --ff-only
+git checkout main && git merge polar
 
 # Verify deployment
 ./restart-prod.sh && tail -f /tmp/polar-*.log
