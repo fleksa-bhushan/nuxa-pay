@@ -80,7 +80,10 @@ class StripeService:
         create_params: stripe_lib.Account.CreateParams = {
             "country": account.country,
             "type": "express",
-            "capabilities": {"transfers": {"requested": True}},
+            "capabilities": {
+                "card_payments": {"requested": True},
+                "transfers": {"requested": True}
+            },
             "settings": {
                 "payouts": {"schedule": {"interval": "manual"}},
             },

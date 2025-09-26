@@ -137,3 +137,14 @@ playground.py
 server/tests/invoice/test_invoice*.pdf
 supervisord.pid
 server/.minio/
+
+# Local development scripts
+start-dev.sh
+stop-dev.sh
+ecosystem.config.js
+start.sh
+stop.sh
+
+# Local environment overrides
+server/.env.local
+*.config.bundled_*.mjs
