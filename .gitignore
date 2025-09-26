@@ -148,3 +148,17 @@ stop.sh
 # Local environment overrides
 server/.env.local
 *.config.bundled_*.mjs
+
+# NuxaPay custom scripts
+start-prod.sh
+stop-prod.sh
+restart-prod.sh
+
+# Local logs and PID files
+/tmp/polar-*.log
+/tmp/polar-*.pid
+
+# Sync helper scripts
+sync-upstream.sh
+merge-upstream.sh
+MERGE_NOTES.md
